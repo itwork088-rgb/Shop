@@ -1,18 +1,52 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="ru">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>Shop</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Красивый шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Каталог товаров</title>
 </head>
 <body>
+
+<header>
+    <h1>🛍 Магазин</h1>
+    <p>Лучшие товары по выгодным ценам</p>
+</header>
+
+<div class="catalog">
+
     {% for product in products %}
-        <h1>{{ product.title }}</h1>
-        <p>{{ product.description }}</p>
+    <div class="card">
+
         {% if product.image %}
-            <img src='{{ product.image.url }}' style='max-width:200px;'>
+            <img class="image-product"
+                 src="{{ product.image.url }}"
+                 alt="{{ product.title }}">
         {% endif %}
-        <p>{{ product.price }}</p>
+
+        <div class="card-content">
+            <h2>{{ product.title }}</h2>
+
+            <p class="description">
+                {{ product.description }}
+            </p>
+
+            <div class="bottom">
+                <span class="price">{{ product.price }} ₽</span>
+
+                <button>Купить</button>
+            </div>
+        </div>
+
+    </div>
     {% endfor %}
+
+</div>
+
 </body>
 </html>
