@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Корзина</title>
+</head>
+<body>
+
+<header>
+    <h1>🛒 Корзина</h1>
+    <p><a href="{% url 'products:list' %}" style="color:white;">← Вернуться в каталог</a></p>
+    <div class="header-actions">
+        {% if user.is_authenticated %}
+            <a href="{% url 'products:profile' %}" class="header-link">👤 {{ user.username }}</a>
+            <a href="{% url 'products:logout' %}" class="header-link">🚪 Выйти</a>
+        {% else %}
+            <a href="{% url 'products:login' %}" class="header-link">🔐 Войти</a>
+            <a href="{% url 'products:register' %}" class="header-link">📝 Регистрация</a>
+        {% endif %}
+    </div>
+</header>
+
+<div class="cart-container">
+    {% if cart|length > 0 %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            <tr>
+                <td class="cart-product-info">
+                    {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="cart-image">
+                    {% endif %}
+                    <span>{{ item.product.name }}</span>
+                </td>
+                <td>{{ item.price }} ₽</td>
+                <td>{{ item.quantity }}</td>
+                <td><strong>{{ item.total_price }} ₽</strong></td>
+                <td>
+                    <form action="{% url 'cart:remove' item.product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="remove-btn">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-total">
+        <p class="total-text">Итого: <strong>{{ cart.get_total_price }} ₽</strong></p>
+        <div class="cart-actions">
+            <a href="{% url 'products:list' %}" class="continue-btn">Продолжить покупки</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'orders:checkout' %}" class="continue-btn" style="background:#059669;">📦 Оформить заказ</a>
+            {% else %}
+                <a href="{% url 'products:login' %}" class="continue-btn" style="background:#059669;">🔐 Войти для оформления</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% else %}
+    <div class="cart-empty">
+        <p>🛒 Ваша корзина пуста</p>
+        <a href="{% url 'products:list' %}" class="continue-btn">Перейти в каталог</a>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
+

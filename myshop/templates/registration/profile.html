@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Личный кабинет</title>
+</head>
+<body>
+
+<header>
+    <h1>👤 Личный кабинет</h1>
+    <p><a href="{% url 'products:list' %}" style="color:white;">← Вернуться в каталог</a></p>
+</header>
+
+<div class="cart-container" style="max-width:800px;">
+    <div class="profile-header">
+        <div class="profile-avatar">👤</div>
+        <div>
+            <h2>{{ user.username }}</h2>
+            <p style="color:#666;">{{ user.email }}</p>
+        </div>
+    </div>
+
+    <div style="margin-top:30px;">
+        <a href="{% url 'products:logout' %}" class="remove-btn" style="text-decoration:none;display:inline-block;">🚪 Выйти</a>
+    </div>
+
+    <h3 style="margin-top:40px;margin-bottom:20px;">📋 Мои заказы</h3>
+
+    {% if orders %}
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <span><strong>Заказ #{{ order.id }}</strong></span>
+                <span style="color:#888;">{{ order.created_at|date:"d.m.Y H:i" }}</span>
+                <span style="color:#4f46e5;">{{ order.get_total_cost }} ₽</span>
+            </div>
+            <div class="order-items">
+                {% for item in order.items.all %}
+                <div class="order-item">
+                    <span>{{ item.product.name }}</span>
+                    <span>x{{ item.quantity }}</span>
+                    <span>{{ item.get_cost }} ₽</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="color:#999;text-align:center;padding:40px;">У вас пока нет заказов.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
+

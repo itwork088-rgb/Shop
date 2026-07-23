@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Заказ оформлен</title>
+</head>
+<body>
+
+<header>
+    <h1>✅ Заказ оформлен!</h1>
+    <p><a href="{% url 'products:list' %}" style="color:white;">← Вернуться в каталог</a></p>
+</header>
+
+<div class="cart-container" style="max-width:600px;text-align:center;">
+    <div style="font-size:64px;margin-bottom:20px;">🎉</div>
+    <h2>Спасибо за заказ, {{ order.full_name }}!</h2>
+    <p style="color:#666;margin:20px 0;">Номер вашего заказа: <strong>#{{ order.id }}</strong></p>
+    <p style="color:#666;">Мы свяжемся с вами по email <strong>{{ order.email }}</strong> для подтверждения.</p>
+    <a href="{% url 'products:list' %}" class="continue-btn" style="margin-top:30px;">Продолжить покупки</a>
+</div>
+
+</body>
+</html>
+

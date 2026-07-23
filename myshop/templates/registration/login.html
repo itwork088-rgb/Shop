@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Вход</title>
+</head>
+<body>
+
+<header>
+    <h1>🔐 Вход в аккаунт</h1>
+    <p><a href="{% url 'products:list' %}" style="color:white;">← Вернуться в каталог</a></p>
+</header>
+
+<div class="cart-container" style="max-width:450px;">
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_username">Имя пользователя</label>
+            <input type="text" name="username" id="id_username" required placeholder="username">
+        </div>
+
+        <div class="form-group">
+            <label for="id_password">Пароль</label>
+            <input type="password" name="password" id="id_password" required placeholder="••••••••">
+        </div>
+
+        {% if form.errors %}
+        <p style="color:#ef4444;margin-bottom:15px;">Неверное имя пользователя или пароль.</p>
+        {% endif %}
+
+        <button type="submit" class="buy-btn" style="width:100%;">Войти</button>
+    </form>
+
+    <p style="text-align:center;margin-top:20px;color:#666;">
+        Нет аккаунта? <a href="{% url 'products:register' %}" style="color:#4f46e5;">Зарегистрироваться</a>
+    </p>
+</div>
+
+</body>
+</html>
+

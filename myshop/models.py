@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -25,7 +26,7 @@ class Product(models.Model):
     slug = models.SlugField(unique=True, verbose_name="URL-метка")
     description = models.TextField(blank=True, verbose_name="Описание")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
-    image = models.ImageField(upload_to="media/%Y/%m/%d", blank=True, verbose_name="Фото товара")
+    image = models.ImageField(upload_to="%Y/%m/%d", blank=True, verbose_name="Фото товара")
     is_available = models.BooleanField(default=True, verbose_name="В наличии")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Добавлен")
 
@@ -39,3 +40,33 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("products:detail", kwargs={"slug": self.slug})
+
+
+class Review(models.Model):
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="reviews",
+        verbose_name="Товар",
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="reviews",
+        verbose_name="Пользователь",
+    )
+    rating = models.PositiveSmallIntegerField(
+        default=5,
+        verbose_name="Оценка",
+        choices=[(i, str(i)) for i in range(1, 6)],
+    )
+    text = models.TextField(verbose_name="Текст отзыва")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата")
+
+    class Meta:
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user.username} — {self.product.name} ({self.rating}★)"

@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Оформление заказа</title>
+</head>
+<body>
+
+<header>
+    <h1>📦 Оформление заказа</h1>
+    <p><a href="{% url 'cart:detail' %}" style="color:white;">← Вернуться в корзину</a></p>
+</header>
+
+<div class="cart-container" style="max-width:700px;">
+    <h2 style="margin-bottom:20px;">Ваш заказ</h2>
+
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Кол-во</th>
+                <th>Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.price }} ₽</td>
+                <td>{{ item.quantity }}</td>
+                <td><strong>{{ item.total_price }} ₽</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-total">
+        <p class="total-text">Итого: <strong>{{ cart.get_total_price }} ₽</strong></p>
+    </div>
+
+    <form method="post" action="{% url 'orders:create' %}" class="checkout-form">
+        {% csrf_token %}
+        <h3 style="margin:30px 0 20px;">Данные получателя</h3>
+
+        <div class="form-group">
+            <label for="full_name">ФИО</label>
+            <input type="text" name="full_name" id="full_name" required placeholder="Иванов Иван Иванович">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required placeholder="ivan@example.com">
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input type="text" name="phone" id="phone" required placeholder="+7 (999) 123-45-67">
+        </div>
+
+        <div class="form-group">
+            <label for="address">Адрес доставки</label>
+            <textarea name="address" id="address" rows="3" required placeholder="Город, улица, дом, квартира"></textarea>
+        </div>
+
+        <button type="submit" class="buy-btn" style="margin-top:20px;width:100%;">✅ Подтвердить заказ</button>
+    </form>
+</div>
+
+</body>
+</html>
+

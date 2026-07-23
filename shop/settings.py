@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'orders',
     'cart',
     'myshop',
     'django.contrib.admin',
@@ -63,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart_context',
             ],
         },
     },
@@ -130,3 +132,5 @@ MEDIA_URL = '/media/'
 
 # Путь к папке на компьютере, где физически будут сохраняться картинки товаров
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CART_SESSION_ID = "cart"
