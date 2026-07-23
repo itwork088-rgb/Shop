@@ -14,5 +14,7 @@ urlpatterns = [
     path("profile/", views.user_profile, name="profile"),
     # Детальная страница товара — ДОЛЖНА быть ПОСЛЕДНЕЙ
     path("<slug:slug>/", views.product_detail, name="detail"),
+    # REST API
+    path("api/products/", views.ProductListAPIView.as_view(), name="api_products"),
 ]
 

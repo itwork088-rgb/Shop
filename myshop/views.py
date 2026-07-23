@@ -144,3 +144,31 @@ def user_profile(request):
     orders = request.user.orders.all()
     return render(request, "registration/profile.html", {"orders": orders})
 
+
+# ====================== REST API ======================
+
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import ProductSerializer
+
+PRODUCTS = [
+    {"id": 1, "title": "Ноутбук", "price": 300000, "in_stock": True},
+    {"id": 2, "title": "Мышка", "price": 7000, "in_stock": False},
+    {"id": 3, "title": "Телефон", "price": 100000, "in_stock": True},
+]
+
+
+class ProductListAPIView(APIView):
+    def get(self, request):
+        serializer = ProductSerializer(PRODUCTS, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+
+        if serializer.is_valid():
+            return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
